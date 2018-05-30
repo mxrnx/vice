@@ -9,6 +9,38 @@ class Vice::Buffer
 		@cursor = Vice::Cursor.new
 	end
 
+	def cursor_end_of_line
+		if @cursor.col > @buffer[@cursor.line].length # move curosr to end of line
+			@cursor.col = @buffer[@cursor.line].length
+		end
+	end
+
+	def cursor_up
+		if @cursor.line > 0
+			@cursor.line -= 1
+		end
+		cursor_end_of_line
+	end
+
+	def cursor_down
+		if @cursor.line < @buffer.length - 1
+			@cursor.line += 1
+		end
+		cursor_end_of_line
+	end
+
+	def cursor_left
+		if @cursor.col > 0
+			@cursor.col -= 1
+		end
+	end
+
+	def cursor_right
+		if @cursor.col < @buffer[@cursor.line].length
+			@cursor.col += 1
+		end
+	end
+
 	def newline(index)
 		raise "negative line index" unless index >= 0
 
@@ -63,6 +95,10 @@ class Vice::Buffer
 		raise "line index out of bounds" unless index < @buffer.length
 
 		return @buffer[index]
+	end
+
+	def currentline
+		getline @cursor.line
 	end
 
 	def lines
