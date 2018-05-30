@@ -10,7 +10,7 @@ class Vice::Movement
 	def self.w_real(line, start, harsh)
 		return start if start == line.length - 1
 		return start + 1 if whitespace(line[start], harsh) && !whitespace(line[start + 1], harsh)
-		return w_real(line, start + 1, harsh)
+		w_real(line, start + 1, harsh)
 	end
 
 	def self.w(line, start)
@@ -24,7 +24,7 @@ class Vice::Movement
 	def self.b_internal(line, start, harsh)
 		return start if start == 0
 		return start if !whitespace(line[start], harsh) && whitespace(line[start - 1], harsh)
-		return b_internal(line, start - 1, harsh)
+		b_internal(line, start - 1, harsh)
 	end
 
 	def self.b_real(line, start, harsh)
@@ -33,7 +33,7 @@ class Vice::Movement
 			start -= 1
 		end
 
-		return b_internal(line, start, harsh)
+		b_internal(line, start, harsh)
 	end
 	def self.b(line, start)
 		b_real(line, start, false)
@@ -41,5 +41,13 @@ class Vice::Movement
 
 	def self.B(line, start)
 		b_real(line, start, true)
+	end
+
+	def self.dollar(line)
+		line.length - 1
+	end
+
+	def self.zero
+		0
 	end
 end

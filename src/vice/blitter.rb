@@ -3,16 +3,23 @@ class Vice::Blitter
 	end
 
 	def drawstatus(mode, window, buffer)
+		# clear
+		window.setpos Curses.lines - 1, 0
+		window.addstr " " * Curses.cols
+
+		# draw mode
 		window.setpos Curses.lines - 1, 0
 		modestring = if mode == :insert 
-			"-- insert --"
+			" -- insert --"
 		else
-			"            "
+			"             "
 		end
 		window.addstr modestring
 
-		window.setpos Curses.lines - 1, Curses.cols - 10
-		window.addstr buffer.cursor.line.to_s + "," + buffer.cursor.col.to_s
+		# draw cursor position
+		location = buffer.cursor.line.to_s + "," + buffer.cursor.col.to_s
+		window.setpos Curses.lines - 1, Curses.cols - location.length - 1
+		window.addstr location
 	end
 
 	def formatnumber(number)
