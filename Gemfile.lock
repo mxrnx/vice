@@ -3,6 +3,7 @@ GEM
   specs:
     curses (1.2.4)
     minitest (5.11.3)
+    rake (12.3.1)
 
 PLATFORMS
   ruby
@@ -10,6 +11,7 @@ PLATFORMS
 DEPENDENCIES
   curses
   minitest
+  rake
 
 BUNDLED WITH
    1.16.1
