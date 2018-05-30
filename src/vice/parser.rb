@@ -12,8 +12,26 @@ class Vice::Parser
 			parsechar vice, buffer, char
 		elsif vice.mode == :insert
 			insertchar vice, buffer, char
+		elsif vice.mode == :prompt
+			promptchar vice, buffer, char
 		else
 			raise "parsekeypress called with unknown mode"
+		end
+	end
+
+	def promptchar(vice, current_buffer, char)
+		case char
+		when 10
+			Vice::Prompt.parse vice, vice.prompt, vice.buffers[current_buffer]
+			vice.prompt = ""
+			vice.mode = :command
+		when 27
+			vice.prompt = ""
+			vice.mode = :command
+		when Integer
+			# do nothing
+		else
+			vice.prompt += char
 		end
 	end
 
@@ -68,6 +86,8 @@ class Vice::Parser
 		when 'x'
 			buffer.rmchar
 			buffer.cursor.col -= 1 if buffer.cursor.col == buffer.cols
+		when ";", ":"
+			vice.mode = :prompt
 		end
 	end
 

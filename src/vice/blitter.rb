@@ -2,18 +2,18 @@ class Vice::Blitter
 	def initialize
 	end
 
-	def drawstatus(mode, window, buffer)
+	def drawstatus(mode, window, buffer, prompt)
 		# clear
 		window.setpos Curses.lines - 1, 0
 		window.addstr " " * Curses.cols
 
 		# draw mode
 		window.setpos Curses.lines - 1, 0
-		modestring = if mode == :insert 
-			" -- insert --"
-		else
-			"             "
-		end
+		modestring = if mode == :insert
+				     " -- insert --"
+			     elsif mode == :prompt
+				     ":" + prompt
+			     end
 		window.addstr modestring
 
 		# draw cursor position
@@ -42,9 +42,18 @@ class Vice::Blitter
 		return string
 	end
 
-	def drawbuffer(mode, window, buffer)
+	def drawbuffer(vice, window)
+		buffer = vice.buffers[vice.currentbuffer]
+		window.setpos 0, 0
+		window.addstr " " * Curses.cols
+		window.setpos 0, 3
+		vice.buffers.each do |b|
+			name = if b.filename then b.filename else '[no name]' end
+			window.addstr name + " | "
+		end
+
 		@linenumwidth = buffer.lines.to_s.length + 1
-		(0..Curses.lines - 1).each do |i|
+		(1..Curses.lines - 1).each do |i|
 			window.setpos i, 0
 			if i < buffer.lines
 				window.addstr formatnumber(i + 1) + pad(buffer.getline(i), Curses.cols)
@@ -53,9 +62,13 @@ class Vice::Blitter
 			end
 		end
 
-		drawstatus mode, window, buffer
+		drawstatus vice.mode, window, buffer, vice.prompt
 
-		window.setpos buffer.cursor.line, buffer.cursor.col + @linenumwidth + 1
+		if vice.mode == :prompt
+			window.setpos Curses.lines - 1, vice.prompt.length + 1
+		else
+			window.setpos buffer.cursor.line + 1, buffer.cursor.col + @linenumwidth + 1
+		end
 		window.refresh
 	end
 end
