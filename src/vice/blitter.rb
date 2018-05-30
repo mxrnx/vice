@@ -17,6 +17,18 @@ class Vice::Blitter
 		window.addstr buffer.cursor.line.to_s + "," + buffer.cursor.col.to_s
 	end
 
+	def formatnumber(number)
+		if number == '~'
+			delta = @linenumwidth - 1
+		else
+			delta = @linenumwidth - number.to_s.length
+		end
+		delta.times do
+			number = ' ' + number.to_s
+		end
+		number += ' '
+	end
+
 	def pad(string, cols)
 		delta = Curses.cols - string.length
 		if delta > 0
@@ -26,16 +38,19 @@ class Vice::Blitter
 	end
 
 	def drawbuffer(mode, window, buffer)
-		(0..buffer.lines - 1).each do |i|
-			if i < Curses.lines - 1
-				window.setpos i, 0
-				window.addstr pad(buffer.getline(i), Curses.cols)
+		@linenumwidth = buffer.lines.to_s.length + 1
+		(0..Curses.lines - 1).each do |i|
+			window.setpos i, 0
+			if i < buffer.lines
+				window.addstr formatnumber(i + 1) + pad(buffer.getline(i), Curses.cols)
+			else
+				window.addstr formatnumber('~')
 			end
 		end
 
 		drawstatus mode, window, buffer
 
-		window.setpos buffer.cursor.line, buffer.cursor.col
+		window.setpos buffer.cursor.line, buffer.cursor.col + @linenumwidth + 1
 		window.refresh
 	end
 end
