@@ -1,14 +1,16 @@
 class Vice::Buffer
 	attr_reader :filename
 	attr_reader :buffer
+	attr_accessor :cursor
 
 	def initialize(filename, contents)
 		@filename = filename if filename
-		@buffer = if contents then contents else Array.new end
+		@buffer = if contents then contents else [""] end
+		@cursor = Vice::Cursor.new
 	end
 
 	def newline(index)
-		raise "Negative line index" unless index >= 0
+		raise "negative line index" unless index >= 0
 
 		# silently append to the end when index out of bounds
 		index = @buffer.length if index > @buffer.length
@@ -17,32 +19,44 @@ class Vice::Buffer
 	end
 
 	def rmline(index)
-		raise "Negative line index" unless index >= 0
-		raise "Line index out of bounds" unless index < @buffer.length
+		raise "negative line index" unless index >= 0
+		raise "line index out of bounds" unless index < @buffer.length
 
 		@buffer.delete_at index
 	end
 
-	def insert(index, column, text)
-		raise "Negative line index" unless index >= 0
-		raise "Line index out of bounds" unless index < @buffer.length
-		raise "Negative column index" unless column >= 0
-		raise "Column index out of bounds" unless column <= @buffer[index].length
+	def insertf(index, column, text)
+		raise "negative line index" unless index >= 0
+		raise "line index out of bounds" unless index < @buffer.length
+		raise "negative column index" unless column >= 0
+		raise "column index out of bounds" unless column <= @buffer[index].length
 
 		@buffer[index].insert column, text
 	end
 
+	def insert(text)
+		insertf @cursor.line, @cursor.col, text
+	end
+
 	def setline(index, text)
-		raise "Negative line index" unless index >= 0
-		raise "Line index out of bounds" unless index < @buffer.length
+		raise "negative line index" unless index >= 0
+		raise "line index out of bounds" unless index < @buffer.length
 
 		@buffer[index] = text
 	end
 
 	def getline(index)
-		raise "Negative line index" unless index >= 0
-		raise "Line index out of bounds" unless index < @buffer.length
+		raise "negative line index" unless index >= 0
+		raise "line index out of bounds" unless index < @buffer.length
 
 		return @buffer[index]
+	end
+
+	def lines
+		return @buffer.length 
+	end
+
+	def cols
+		return @buffer[@cursor.line].length
 	end
 end
