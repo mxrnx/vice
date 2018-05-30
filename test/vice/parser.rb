@@ -39,6 +39,16 @@ class TestParser < MiniTest::Test
 		assert_equal @vice.mode, :insert
 	end
 
+	# test the I command
+	def test_parsechar_I
+		@vice.buffers[@buffer].setline 0, "abcdefg"
+		@vice.buffers[@buffer].cursor.col = 4
+
+		@parser.parsechar @vice, @buffer, 'I'
+		assert_equal @vice.mode, :insert
+		assert_equal @vice.buffers[@buffer].cursor.col, 0
+	end
+
 	# test inserting characters
 	def test_insert_some_text
 		@vice.mode = :insert
@@ -60,5 +70,12 @@ class TestParser < MiniTest::Test
 		@vice.buffers[@buffer].cursor.col = 8
 		@parser.insertchar @vice, @buffer, ' '
 		assert_equal @vice.buffers[@buffer].getline(1), "é melhor ser alegre que ser triste"
+	end
+
+	def test_parsechar_escape
+		@vice.mode = :insert
+
+		@parser.insertchar @vice, @buffer, 27
+		assert_equal @vice.mode, :command
 	end
 end

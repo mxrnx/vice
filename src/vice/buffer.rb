@@ -38,6 +38,19 @@ class Vice::Buffer
 		insertf @cursor.line, @cursor.col, text
 	end
 
+	def rmcharf(index, column)
+		raise "negative line index" unless index >= 0
+		raise "line index out of bounds" unless index < @buffer.length
+		raise "negative column index" unless column >= 0
+		raise "column index out of bounds" unless column <= @buffer[index].length
+
+		@buffer[index].slice! column
+	end
+
+	def rmchar
+		rmcharf @cursor.line, @cursor.col
+	end
+
 	def setline(index, text)
 		raise "negative line index" unless index >= 0
 		raise "line index out of bounds" unless index < @buffer.length
