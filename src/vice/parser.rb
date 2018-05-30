@@ -30,23 +30,21 @@ class Vice::Parser
 		case char
 		# movement
 		when 'j'
-			if vice.buffers[buffer].lines > vice.buffers[buffer].cursor.line + 1
-				vice.buffers[buffer].cursor.line += 1
-				fixcursorposition vice, buffer
-			end
+			vice.buffers[buffer].cursor_down
 		when 'k'
-			if vice.buffers[buffer].cursor.line - 1 >= 0
-				vice.buffers[buffer].cursor.line -= 1
-				fixcursorposition vice, buffer
-			end
+			vice.buffers[buffer].cursor_up
 		when 'l'
-			if vice.buffers[buffer].cols > vice.buffers[buffer].cursor.col + 1
-				vice.buffers[buffer].cursor.col += 1
-			end
+			vice.buffers[buffer].cursor_right
 		when 'h'
-			if vice.buffers[buffer].cursor.col - 1 >= 0
-				vice.buffers[buffer].cursor.col -= 1
-			end
+			vice.buffers[buffer].cursor_left
+		when 'w'
+			vice.buffers[buffer].cursor.col = Vice::Movement.w(vice.buffers[buffer].currentline, vice.buffers[buffer].cursor.col)
+		when 'W'
+			vice.buffers[buffer].cursor.col = Vice::Movement.W(vice.buffers[buffer].currentline, vice.buffers[buffer].cursor.col)
+		when 'b'
+			vice.buffers[buffer].cursor.col = Vice::Movement.b(vice.buffers[buffer].currentline, vice.buffers[buffer].cursor.col)
+		when 'B'
+			vice.buffers[buffer].cursor.col = Vice::Movement.B(vice.buffers[buffer].currentline, vice.buffers[buffer].cursor.col)
 
 		# entering insert mode
 		when 'I'
@@ -66,8 +64,7 @@ class Vice::Parser
 			vice.mode = :insert
 		when 'o'
 			vice.buffers[buffer].newline vice.buffers[buffer].cursor.line + 1
-			vice.buffers[buffer].cursor.line += 1
-			vice.buffers[buffer].cursor.col = 0
+			vice.buffers[buffer].cursor_down
 			vice.mode = :insert
 
 		# etc.
@@ -82,11 +79,14 @@ class Vice::Parser
 		case char
 		when 27 # escape
 			vice.mode = :command
-		when 127
+		when 127 # backspace
 			if vice.buffers[buffer].cursor.col > 0
 				vice.buffers[buffer].cursor.col -= 1
 				vice.buffers[buffer].rmchar
 			end
+		when 10 # return
+			vice.buffers[buffer].newline vice.buffers[buffer].cursor.line + 1
+			vice.buffers[buffer].cursor_down
 		when Integer
 			# not a character we can insert, do nothing
 		else

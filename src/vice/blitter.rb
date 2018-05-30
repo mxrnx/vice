@@ -1,5 +1,3 @@
-require 'curses'
-
 class Vice::Blitter
 	def initialize
 	end
