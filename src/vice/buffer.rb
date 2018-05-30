@@ -3,10 +3,25 @@ class Vice::Buffer
 	attr_reader :buffer
 	attr_accessor :cursor
 
-	def initialize(filename, contents)
-		@filename = filename if filename
-		@buffer = if contents then contents else [""] end
+	def initialize(filename)
+		@buffer = Array.new
+		if filename
+			@filename = filename
+			File.open(filename, "r") do |f| # TODO: don't assume file exists
+				f.each_line do |line|
+					@buffer.push line
+				end
+			end
+		else
+			@buffer.push ""
+		end
 		@cursor = Vice::Cursor.new
+	end
+
+	def write(filename)
+	end
+
+	def write
 	end
 
 	def cursor_end_of_line
