@@ -17,81 +17,79 @@ class Vice::Parser
 		end
 	end
 
-	def fixcursorposition(vice, buffer)
-		if vice.buffers[buffer].cols == 0
-			vice.buffers[buffer].cursor.col = 0
-		elsif vice.buffers[buffer].cols <= vice.buffers[buffer].cursor.col + 1
-			vice.buffers[buffer].cursor.col = vice.buffers[buffer].cols - 1
-		end
-	end
-
-	def parsechar(vice, buffer, char)
+	def parsechar(vice, current_buffer, char)
+		buffer = vice.buffers[current_buffer]
 		raise "parsechar called from command mode" unless vice.mode == :command
 		case char
 		# movement
 		when 'j'
-			vice.buffers[buffer].cursor_down
+			buffer.cursor_down
 		when 'k'
-			vice.buffers[buffer].cursor_up
+			buffer.cursor_up
 		when 'l'
-			vice.buffers[buffer].cursor_right
+			buffer.cursor_right
 		when 'h'
-			vice.buffers[buffer].cursor_left
+			buffer.cursor_left
 		when 'w'
-			vice.buffers[buffer].cursor.col = Vice::Movement.w(vice.buffers[buffer].currentline, vice.buffers[buffer].cursor.col)
+			buffer.cursor.col = Vice::Movement.w(buffer.currentline, buffer.cursor.col)
 		when 'W'
-			vice.buffers[buffer].cursor.col = Vice::Movement.W(vice.buffers[buffer].currentline, vice.buffers[buffer].cursor.col)
+			buffer.cursor.col = Vice::Movement.W(buffer.currentline, buffer.cursor.col)
 		when 'b'
-			vice.buffers[buffer].cursor.col = Vice::Movement.b(vice.buffers[buffer].currentline, vice.buffers[buffer].cursor.col)
+			buffer.cursor.col = Vice::Movement.b(buffer.currentline, buffer.cursor.col)
 		when 'B'
-			vice.buffers[buffer].cursor.col = Vice::Movement.B(vice.buffers[buffer].currentline, vice.buffers[buffer].cursor.col)
+			buffer.cursor.col = Vice::Movement.B(buffer.currentline, buffer.cursor.col)
+		when '$'
+			buffer.cursor.col = Vice::Movement.dollar buffer.currentline
+		when '0'
+			buffer.cursor.col = Vice::Movement.zero
 
 		# entering insert mode
 		when 'I'
-			vice.buffers[buffer].cursor.col = 0
+			buffer.cursor.col = 0
 			vice.mode = :insert
 		when 'i'
 			vice.mode = :insert
 		when 'A'
-			vice.buffers[buffer].cursor.col = vice.buffers[buffer].cols
+			buffer.cursor.col = buffer.cols
 			vice.mode = :insert
 		when 'a'
-			vice.buffers[buffer].cursor.col += 1 if vice.buffers[buffer].cursor.col < vice.buffers[buffer].cols
+			buffer.cursor.col += 1 if buffer.cursor.col < buffer.cols
 			vice.mode = :insert
 		when 'O'
-			vice.buffers[buffer].newline vice.buffers[buffer].cursor.line
-			vice.buffers[buffer].cursor.col = 0
+			buffer.newline buffer.cursor.line
+			buffer.cursor.col = 0
 			vice.mode = :insert
 		when 'o'
-			vice.buffers[buffer].newline vice.buffers[buffer].cursor.line + 1
-			vice.buffers[buffer].cursor_down
+			buffer.newline buffer.cursor.line + 1
+			buffer.cursor_down
 			vice.mode = :insert
 
 		# etc.
 		when 'x'
-			vice.buffers[buffer].rmchar
-			vice.buffers[buffer].cursor.col -= 1 if vice.buffers[buffer].cursor.col == vice.buffers[buffer].cols
+			buffer.rmchar
+			buffer.cursor.col -= 1 if buffer.cursor.col == buffer.cols
 		end
 	end
 
-	def insertchar(vice, buffer, char)
+	def insertchar(vice, current_buffer, char)
+		buffer = vice.buffers[current_buffer]
 		raise "insertchar called from insert mode" unless vice.mode == :insert
 		case char
 		when 27 # escape
 			vice.mode = :command
 		when 127 # backspace
-			if vice.buffers[buffer].cursor.col > 0
-				vice.buffers[buffer].cursor.col -= 1
-				vice.buffers[buffer].rmchar
+			if buffer.cursor.col > 0
+				buffer.cursor.col -= 1
+				buffer.rmchar
 			end
 		when 10 # return
-			vice.buffers[buffer].newline vice.buffers[buffer].cursor.line + 1
-			vice.buffers[buffer].cursor_down
+			buffer.newline buffer.cursor.line + 1
+			buffer.cursor_down
 		when Integer
 			# not a character we can insert, do nothing
 		else
-			vice.buffers[buffer].insert char
-			vice.buffers[buffer].cursor.col += 1
+			buffer.insert char
+			buffer.cursor.col += 1
 		end
 	end
 end
