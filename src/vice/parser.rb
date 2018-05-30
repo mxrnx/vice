@@ -54,6 +54,12 @@ class Vice::Parser
 			vice.mode = :insert
 		when 'i'
 			vice.mode = :insert
+		when 'A'
+			vice.buffers[buffer].cursor.col = vice.buffers[buffer].cols
+			vice.mode = :insert
+		when 'a'
+			vice.buffers[buffer].cursor.col += 1 if vice.buffers[buffer].cursor.col < vice.buffers[buffer].cols
+			vice.mode = :insert
 		when 'O'
 			vice.buffers[buffer].newline vice.buffers[buffer].cursor.line
 			vice.buffers[buffer].cursor.col = 0
@@ -76,7 +82,6 @@ class Vice::Parser
 		case char
 		when 27 # escape
 			vice.mode = :command
-		#when Curses::Key::BACKSPACE
 		when 127
 			if vice.buffers[buffer].cursor.col > 0
 				vice.buffers[buffer].cursor.col -= 1
