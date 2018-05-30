@@ -38,4 +38,11 @@ class Vice::Buffer
 
 		@buffer[index] = text
 	end
+
+	def getline(index)
+		raise "Negative line index" unless index >= 0
+		raise "Line index out of bounds" unless index < @buffer.length
+
+		return @buffer[index]
+	end
 end
