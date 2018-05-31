@@ -53,12 +53,13 @@ class Vice::Blitter
 		end
 
 		@linenumwidth = buffer.lines.to_s.length + 1
-		(1..Curses.lines - 1).each do |i|
-			window.setpos i, 0
+		(1..Curses.lines - 1).each do |r|
+			i = r - 1
+			window.setpos r, 0
 			if i < buffer.lines
 				window.addstr formatnumber(i + 1) + pad(buffer.getline(i), Curses.cols)
 			else
-				window.addstr formatnumber('~')
+				window.addstr pad(formatnumber('~'), Curses.cols)
 			end
 		end
 

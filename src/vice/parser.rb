@@ -9,17 +9,17 @@ class Vice::Parser
 
 	def parsekeypress(vice, buffer, char)
 		if vice.mode == :command
-			parsechar vice, buffer, char
+			parsechar_command vice, buffer, char
 		elsif vice.mode == :insert
-			insertchar vice, buffer, char
+			parsechar_insert vice, buffer, char
 		elsif vice.mode == :prompt
-			promptchar vice, buffer, char
+			parsechar_prompt vice, buffer, char
 		else
 			raise "parsekeypress called with unknown mode"
 		end
 	end
 
-	def promptchar(vice, current_buffer, char)
+	def parsechar_prompt(vice, current_buffer, char)
 		case char
 		when 10
 			Vice::Prompt.parse vice, vice.prompt, vice.buffers[current_buffer]
@@ -35,7 +35,7 @@ class Vice::Parser
 		end
 	end
 
-	def parsechar(vice, current_buffer, char)
+	def parsechar_command(vice, current_buffer, char)
 		buffer = vice.buffers[current_buffer]
 		raise "parsechar called from command mode" unless vice.mode == :command
 		case char
@@ -86,17 +86,32 @@ class Vice::Parser
 		when 'x'
 			buffer.rmchar
 			buffer.cursor.col -= 1 if buffer.cursor.col == buffer.cols
+		when 'd'
+			if @trail.length > 0 && @trail[0] == 'd'
+				if buffer.lines == 1
+					buffer.setline 0, ""
+				else
+					buffer.rmline
+					buffer.cursor.line -= 1 if buffer.lines <= buffer.cursor.line
+				end
+				buffer.cursor.col = 0
+				@trail = Array.new
+			else
+				@trail.push 'd'
+			end
 		when ";", ":"
 			vice.mode = :prompt
 		end
+		buffer.cursor_end_of_line
 	end
 
-	def insertchar(vice, current_buffer, char)
+	def parsechar_insert(vice, current_buffer, char)
 		buffer = vice.buffers[current_buffer]
 		raise "insertchar called from insert mode" unless vice.mode == :insert
 		case char
 		when 27 # escape
 			vice.mode = :command
+			buffer.cursor_end_of_line
 		when 127 # backspace
 			if buffer.cursor.col > 0
 				buffer.cursor.col -= 1
