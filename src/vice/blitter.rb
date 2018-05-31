@@ -2,6 +2,18 @@ class Vice::Blitter
 	def initialize
 	end
 
+	def drawtabs(vice, buffer, window)
+		window.setpos 0, 0
+		window.addstr " " * Curses.cols
+		window.setpos 0, 3
+		vice.buffers.each do |b|
+			name = if b.filename then b.filename else '[no name]' end
+			name = if b == buffer then ">" + name + "<" else name end
+			name = if b.modified then "+ " + name else name end
+			window.addstr name + " | "
+		end
+	end
+
 	def drawstatus(mode, window, buffer, prompt)
 		# clear
 		window.setpos Curses.lines - 1, 0
@@ -44,13 +56,8 @@ class Vice::Blitter
 
 	def drawbuffer(vice, window)
 		buffer = vice.buffers[vice.currentbuffer]
-		window.setpos 0, 0
-		window.addstr " " * Curses.cols
-		window.setpos 0, 3
-		vice.buffers.each do |b|
-			name = if b.filename then b.filename else '[no name]' end
-			window.addstr name + " | "
-		end
+
+		drawtabs vice, buffer, window
 
 		@linenumwidth = buffer.lines.to_s.length + 1
 		(1..Curses.lines - 1).each do |r|

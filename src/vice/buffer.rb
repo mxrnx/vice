@@ -43,12 +43,14 @@ class Vice::Buffer
 		if @cursor.line > 0
 			@cursor.line -= 1
 		end
+		cursor_end_of_line
 	end
 
 	def cursor_down
 		if @cursor.line < @buffer.length - 1
 			@cursor.line += 1
 		end
+		cursor_end_of_line
 	end
 
 	def cursor_left
@@ -66,7 +68,7 @@ class Vice::Buffer
 	def newline(index)
 		raise "negative line index" unless index >= 0
 
-		@modfied = true
+		@modified = true
 
 		# silently append to the end when index out of bounds
 		index = @buffer.length if index > @buffer.length
@@ -78,7 +80,7 @@ class Vice::Buffer
 		raise "negative line index" unless index >= 0
 		raise "line index out of bounds" unless index < @buffer.length
 
-		@modfied = true
+		@modified = true
 
 		@buffer.delete_at index
 	end
@@ -93,7 +95,7 @@ class Vice::Buffer
 		raise "negative column index" unless column >= 0
 		raise "column index out of bounds" unless column <= @buffer[index].length
 
-		@modfied = true
+		@modified = true
 
 		@buffer[index].insert column, text
 	end
@@ -108,7 +110,7 @@ class Vice::Buffer
 		raise "negative column index" unless column >= 0
 		raise "column index out of bounds" unless column <= @buffer[index].length
 
-		@modfied = true
+		@modified = true
 
 		@buffer[index].slice! column
 	end
@@ -121,7 +123,7 @@ class Vice::Buffer
 		raise "negative line index" unless index >= 0
 		raise "line index out of bounds" unless index < @buffer.length
 
-		@modfied = true
+		@modified = true
 
 		@buffer[index] = text
 	end

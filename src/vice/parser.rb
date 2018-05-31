@@ -102,7 +102,6 @@ class Vice::Parser
 		when ";", ":"
 			vice.mode = :prompt
 		end
-		buffer.cursor_end_of_line
 	end
 
 	def parsechar_insert(vice, current_buffer, char)
