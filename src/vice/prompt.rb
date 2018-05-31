@@ -19,7 +19,7 @@ class Vice::Prompt
 			end
 		when 'w'
 			if words.length > 1
-				buffer.write words[1]
+				buffer.writef words[1]
 			elsif buffer.filename != nil
 				buffer.write
 			else

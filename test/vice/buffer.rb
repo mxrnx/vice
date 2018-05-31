@@ -61,10 +61,10 @@ class TestBuffer < MiniTest::Test
 		assert_equal "chunky bacon", @buffer.buffer[0]
 	end
 
-	def test_rmline_valid
+	def test_rmlinef_valid
 		assert_equal [""], @buffer.buffer
 
-		@buffer.rmline 0
+		@buffer.rmlinef 0
 		assert_equal [], @buffer.buffer
 	end
 
