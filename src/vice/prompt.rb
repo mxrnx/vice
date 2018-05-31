@@ -8,6 +8,9 @@ class Vice::Prompt
 			if words.length > 1
 				files = words.dup
 				files.shift
+				if !buffer.modified
+					vice.buffers.delete buffer
+				end
 				files.each do |f|
 					vice.buffers.push Vice::Buffer.new(f)
 				end
