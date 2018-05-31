@@ -70,6 +70,13 @@ class TestBuffer < MiniTest::Test
 
 	def test_getline_valid
 		@buffer.setline 0, "chunky bacon"
-		assert_equal @buffer.getline(0), "chunky bacon"
+		assert_equal "chunky bacon", @buffer.getline(0)
+	end
+
+	def test_modified
+		assert_equal false, @buffer.modified
+
+		@buffer.newline 0
+		assert_equal true, @buffer.modified
 	end
 end
