@@ -1,6 +1,7 @@
 class Vice::Buffer
-	attr_reader :filename
 	attr_reader :buffer
+	attr_reader :filename
+	attr_reader :modified
 	attr_accessor :cursor
 
 	def initialize(filename)
@@ -16,12 +17,15 @@ class Vice::Buffer
 			@buffer.push ""
 		end
 		@cursor = Vice::Cursor.new
+		@modified = false
 	end
 
 	def write(filename)
+		@modified = false
 	end
 
 	def write
+		write @filename
 	end
 
 	def cursor_end_of_line
@@ -59,6 +63,8 @@ class Vice::Buffer
 	def newline(index)
 		raise "negative line index" unless index >= 0
 
+		@modfied = true
+
 		# silently append to the end when index out of bounds
 		index = @buffer.length if index > @buffer.length
 
@@ -69,6 +75,8 @@ class Vice::Buffer
 		raise "negative line index" unless index >= 0
 		raise "line index out of bounds" unless index < @buffer.length
 
+		@modfied = true
+
 		@buffer.delete_at index
 	end
 
@@ -77,6 +85,8 @@ class Vice::Buffer
 		raise "line index out of bounds" unless index < @buffer.length
 		raise "negative column index" unless column >= 0
 		raise "column index out of bounds" unless column <= @buffer[index].length
+
+		@modfied = true
 
 		@buffer[index].insert column, text
 	end
@@ -91,6 +101,8 @@ class Vice::Buffer
 		raise "negative column index" unless column >= 0
 		raise "column index out of bounds" unless column <= @buffer[index].length
 
+		@modfied = true
+
 		@buffer[index].slice! column
 	end
 
@@ -101,6 +113,8 @@ class Vice::Buffer
 	def setline(index, text)
 		raise "negative line index" unless index >= 0
 		raise "line index out of bounds" unless index < @buffer.length
+
+		@modfied = true
 
 		@buffer[index] = text
 	end
