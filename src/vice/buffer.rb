@@ -126,6 +126,7 @@ class Vice::Buffer
 		@modified = true
 
 		@buffer[index] = text
+		cursor_end_of_line
 	end
 
 	def getline(index)

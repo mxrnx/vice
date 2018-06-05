@@ -5,11 +5,12 @@ module Vice
 
 	class Vice
 		attr_accessor :buffers
-		attr_accessor :mode
-		attr_accessor :cursor
 		attr_accessor :currentbuffer
+		attr_accessor :cursor
+		attr_accessor :mode
 		attr_accessor :prompt
 
+		attr_reader :msg
 
 		def initialize
 			@mode = :command
@@ -19,15 +20,17 @@ module Vice
 		end
 
 		def start
-			blitter = Blitter.new
-
 			# for now: create a single buffer
 			@buffers.push Buffer.new nil
 			@currentbuffer = 0
 
 			Curses.init_screen
 			Curses.noecho
+			Curses.start_color
+			Curses.use_default_colors
 			window = Curses.stdscr
+
+			blitter = Blitter.new window
 
 			loop do
 				blitter.drawbuffer self, window
@@ -36,6 +39,18 @@ module Vice
 			end
 
 			Curses.close_screen
+		end
+
+		def alert(msg)
+			@msg = msg
+		end
+
+		def error(msg)
+			@msg = 'error: ' + msg
+		end
+
+		def reset_alert
+			@msg = nil
 		end
 	end
 end

@@ -42,6 +42,7 @@ class Vice::Parser
 		# movement
 		when 'j'
 			buffer.cursor_down
+			vice.alert 'test'
 		when 'k'
 			buffer.cursor_up
 		when 'l'
@@ -49,7 +50,18 @@ class Vice::Parser
 		when 'h'
 			buffer.cursor_left
 		when 'w'
-			buffer.cursor.col = Vice::Movement.w(buffer.currentline, buffer.cursor.col)
+			if @trail.length > 0
+				if @trail[0] == 'd' or @trail[0] == 'c'
+					line_edited = buffer.currentline
+					line_edited.slice!(buffer.cursor.col,
+							   buffer.currentline.length - Vice::Movement.w(buffer.currentline, buffer.cursor.col) - 1)
+					buffer.setline buffer.cursor.line, line_edited
+				end
+				vice.mode = :insert if @trail[0] == 'c'
+				@trail = Array.new
+			else
+				buffer.cursor.col = Vice::Movement.w(buffer.currentline, buffer.cursor.col)
+			end
 		when 'W'
 			buffer.cursor.col = Vice::Movement.W(buffer.currentline, buffer.cursor.col)
 		when 'b'
@@ -86,8 +98,8 @@ class Vice::Parser
 		when 'x'
 			buffer.rmchar
 			buffer.cursor.col -= 1 if buffer.cursor.col > 0
-		when 'd'
-			if @trail.length > 0 && @trail[0] == 'd'
+		when 'c', 'd'
+			if @trail.length > 0 && @trail[0] == char
 				if buffer.lines == 1
 					buffer.setline 0, ""
 				else
@@ -95,9 +107,10 @@ class Vice::Parser
 					buffer.cursor.line -= 1 if buffer.lines <= buffer.cursor.line
 				end
 				buffer.cursor.col = 0
+				vice.mode = :insert if char == 'c'
 				@trail = Array.new
 			else
-				@trail.push 'd'
+				@trail.push char
 			end
 		when ";", ":"
 			vice.mode = :prompt
