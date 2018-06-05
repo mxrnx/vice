@@ -85,7 +85,7 @@ class Vice::Parser
 		# etc.
 		when 'x'
 			buffer.rmchar
-			buffer.cursor.col -= 1 if buffer.cursor.col == buffer.cols
+			buffer.cursor.col -= 1 if buffer.cursor.col > 0
 		when 'd'
 			if @trail.length > 0 && @trail[0] == 'd'
 				if buffer.lines == 1
@@ -108,6 +108,12 @@ class Vice::Parser
 		buffer = vice.buffers[current_buffer]
 		raise "insertchar called from insert mode" unless vice.mode == :insert
 		case char
+		when 9
+			buffer.insert "\t"
+			buffer.cursor.col += 1
+		when 10 # return
+			buffer.newline buffer.cursor.line + 1
+			buffer.cursor_down
 		when 27 # escape
 			vice.mode = :command
 			buffer.cursor_end_of_line
@@ -116,9 +122,6 @@ class Vice::Parser
 				buffer.cursor.col -= 1
 				buffer.rmchar
 			end
-		when 10 # return
-			buffer.newline buffer.cursor.line + 1
-			buffer.cursor_down
 		when Integer
 			# not a character we can insert, do nothing
 		else

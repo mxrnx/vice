@@ -1,12 +1,15 @@
 require 'curses'
 
 module Vice
+	TAB_WIDTH = 4
+
 	class Vice
 		attr_accessor :buffers
 		attr_accessor :mode
 		attr_accessor :cursor
 		attr_accessor :currentbuffer
 		attr_accessor :prompt
+
 
 		def initialize
 			@mode = :command
