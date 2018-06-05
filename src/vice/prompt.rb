@@ -23,7 +23,7 @@ class Vice::Prompt
 			elsif buffer.filename != nil
 				buffer.write
 			else
-				# TODO: notify user of user error
+				vice.error 'buffer has no filename'
 			end
 		when 'q'
 			vice.buffers.delete buffer

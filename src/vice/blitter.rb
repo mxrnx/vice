@@ -1,5 +1,7 @@
 class Vice::Blitter
-	def initialize
+	def initialize(window)
+		Curses.init_pair 1, Curses::COLOR_BLACK, Curses::COLOR_WHITE
+		window.attrset Curses.color_pair(0)
 	end
 
 	def drawtabs(vice, buffer, window)
@@ -14,13 +16,27 @@ class Vice::Blitter
 		end
 	end
 
-	def drawstatus(mode, window, buffer, prompt)
-		# clear
+	def drawalert(vice, window)
 		window.setpos Curses.lines - 1, 0
 		window.addstr " " * Curses.cols
 
+		if vice.msg
+			window.setpos Curses.lines - 1, 0
+			window.addstr vice.msg
+
+			vice.reset_alert
+		end
+	end
+
+	def drawstatus(mode, window, buffer, prompt)
+		window.attrset Curses.color_pair(1)
+
+		# clear
+		window.setpos Curses.lines - 2, 0
+		window.addstr " " * Curses.cols
+
 		# draw mode
-		window.setpos Curses.lines - 1, 0
+		window.setpos Curses.lines - 2, 0
 		modestring = if mode == :insert
 				     " -- insert --"
 			     elsif mode == :prompt
@@ -30,8 +46,10 @@ class Vice::Blitter
 
 		# draw cursor position
 		location = buffer.cursor.line.to_s + "," + buffer.cursor.col.to_s
-		window.setpos Curses.lines - 1, Curses.cols - location.length - 1
+		window.setpos Curses.lines - 2, Curses.cols - location.length - 1
 		window.addstr location
+
+		window.attrset Curses.color_pair(0)
 	end
 
 	def formatnumber(number)
@@ -66,10 +84,11 @@ class Vice::Blitter
 					     end
 		end
 
+
 		drawtabs vice, buffer, window
 
 		@linenumwidth = buffer.lines.to_s.length + 1
-		(1..Curses.lines - 1).each do |r|
+		(1..Curses.lines - 2).each do |r|
 			i = r - 1
 			window.setpos r, 0
 			if i < buffer.lines
@@ -80,11 +99,16 @@ class Vice::Blitter
 		end
 
 		drawstatus vice.mode, window, buffer, vice.prompt
+		
+		drawalert vice, window
+
+		visual_cursor.line += 1			# space for tabs above buffer
+		visual_cursor.col += @linenumwidth + 1	# leave space for line numbers
 
 		if vice.mode == :prompt
-			window.setpos Curses.lines - 1, vice.prompt.length + 1
+			window.setpos Curses.lines - 2, vice.prompt.length + 1
 		else
-			window.setpos visual_cursor.line + 1, visual_cursor.col + @linenumwidth + 1
+			window.setpos visual_cursor.line, visual_cursor.col
 		end
 		window.refresh
 	end
