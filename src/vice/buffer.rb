@@ -33,7 +33,7 @@ class Vice::Buffer
 	end
 
 	def cursor_end_of_line
-		if @cursor.col >= @buffer[@cursor.line].length # move curosr to end of line
+		if @cursor.col >= @buffer[@cursor.line].length # move cursor to end of line
 			@cursor.col = @buffer[@cursor.line].length - 1
 		end
 		@cursor.col = 0 if @cursor.col < 0

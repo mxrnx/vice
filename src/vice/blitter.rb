@@ -56,6 +56,15 @@ class Vice::Blitter
 
 	def drawbuffer(vice, window)
 		buffer = vice.buffers[vice.currentbuffer]
+		visual_cursor = Vice::Cursor.new buffer.cursor.line, 0
+
+		(0..buffer.cursor.col - 1).each do |i|
+			visual_cursor.col += if buffer.currentline[i] == "\t" 
+						     Vice::TAB_WIDTH
+					     else
+						     1
+					     end
+		end
 
 		drawtabs vice, buffer, window
 
@@ -64,7 +73,7 @@ class Vice::Blitter
 			i = r - 1
 			window.setpos r, 0
 			if i < buffer.lines
-				window.addstr formatnumber(i + 1) + pad(buffer.getline(i), Curses.cols)
+				window.addstr formatnumber(i + 1) + pad(buffer.getline(i).gsub(/(\t)/, ' ' * Vice::TAB_WIDTH), Curses.cols)
 			else
 				window.addstr pad(formatnumber('~'), Curses.cols)
 			end
@@ -75,7 +84,7 @@ class Vice::Blitter
 		if vice.mode == :prompt
 			window.setpos Curses.lines - 1, vice.prompt.length + 1
 		else
-			window.setpos buffer.cursor.line + 1, buffer.cursor.col + @linenumwidth + 1
+			window.setpos visual_cursor.line + 1, visual_cursor.col + @linenumwidth + 1
 		end
 		window.refresh
 	end
