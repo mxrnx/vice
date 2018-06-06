@@ -42,7 +42,6 @@ class Vice::Parser
 		# movement
 		when 'j'
 			buffer.cursor_down
-			vice.alert 'test'
 		when 'k'
 			buffer.cursor_up
 		when 'l'
@@ -50,7 +49,7 @@ class Vice::Parser
 		when 'h'
 			buffer.cursor_left
 		when 'w'
-			if !@trail.length.empty?
+			if !@trail.empty?
 				if @trail[0] == 'd' || @trail[0] == 'c'
 					line_edited = buffer.currentline
 					right_limit = buffer.currentline.length
@@ -101,8 +100,17 @@ class Vice::Parser
 		when 'x'
 			buffer.rmchar
 			buffer.cursor.col -= 1 if buffer.cursor.col > 0
-		when 'c', 'd'
-			if !@trail.length.empty? && @trail[0] == char
+		when 'c'
+			if !@trail.empty? && @trail[0] == 'c'
+				buffer.setline buffer.cursor.line, ''
+				buffer.cursor.col = 0
+				vice.mode = :insert
+				@trail = []
+			else
+				@trail.push 'c'
+			end
+		when 'd'
+			if !@trail.empty? && @trail[0] == 'd'
 				if buffer.lines == 1
 					buffer.setline 0, ''
 				else
@@ -110,10 +118,9 @@ class Vice::Parser
 				end
 				buffer.cursor.line -= 1 if buffer.lines <= buffer.cursor.line
 				buffer.cursor.col = 0
-				vice.mode = :insert if char == 'c'
 				@trail = []
 			else
-				@trail.push char
+				@trail.push 'd'
 			end
 		when ';', ':'
 			vice.mode = :prompt
