@@ -1,9 +1,9 @@
 class Vice::Movement
 	def self.whitespace(char, harsh)
 		if harsh # only real whitespace
-			return (char == ' ' || char == "\t" || char == "\n")
+			(char == ' ' || char == "\t" || char == "\n")
 		else # anything that's not alphanumeric
-			return !(char =~ /\A\p{Alnum}+\z/)
+			char !~ /\A\p{Alnum}+\z/
 		end
 	end
 
@@ -17,29 +17,30 @@ class Vice::Movement
 		w_real(line, start, false)
 	end
 
-	def self.W(line, start)
+	def self.w_large(line, start)
 		w_real(line, start, true)
 	end
 
 	def self.b_internal(line, start, harsh)
-		return start if start == 0
+		return start if start.zero?
+
 		return start if !whitespace(line[start], harsh) && whitespace(line[start - 1], harsh)
+
 		b_internal(line, start - 1, harsh)
 	end
 
 	def self.b_real(line, start, harsh)
-		# if we're already on the beginning of a word, we want to jump to the previous one
-		if start > 0 && !whitespace(line[start], harsh) && whitespace(line[start - 1], harsh)
-			start -= 1
-		end
+		# if we're already on the beginning of a word, we jump to the previous one
+		start -= 1 if start > 0 && !whitespace(line[start], harsh) && whitespace(line[start - 1], harsh)
 
 		b_internal(line, start, harsh)
 	end
+
 	def self.b(line, start)
 		b_real(line, start, false)
 	end
 
-	def self.B(line, start)
+	def self.b_large(line, start)
 		b_real(line, start, true)
 	end
 

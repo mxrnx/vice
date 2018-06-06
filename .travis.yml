@@ -1,6 +1,8 @@
 language: ruby
 rvm: 2.3
-script: bundle exec rake test
+script:
+        - rake style
+        - bundle exec rake test
 os:
         - linux
         - osx
