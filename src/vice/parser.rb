@@ -4,7 +4,7 @@ class Vice::Parser
 	end
 
 	def resettrail
-		@trail = Array.new
+		@trail = []
 	end
 
 	def parsekeypress(vice, buffer, char)
@@ -15,7 +15,7 @@ class Vice::Parser
 		elsif vice.mode == :prompt
 			parsechar_prompt vice, buffer, char
 		else
-			raise "parsekeypress called with unknown mode"
+			raise 'parsekeypress called with unknown mode'
 		end
 	end
 
@@ -23,13 +23,13 @@ class Vice::Parser
 		case char
 		when 10
 			Vice::Prompt.parse vice, vice.prompt, vice.buffers[current_buffer]
-			vice.prompt = ""
+			vice.prompt = ''
 			vice.mode = :command
 		when 27
-			vice.prompt = ""
+			vice.prompt = ''
 			vice.mode = :command
 		when Integer
-			# do nothing
+			vice.prompt += char if char >= 0 && char <= 10
 		else
 			vice.prompt += char
 		end
@@ -37,7 +37,7 @@ class Vice::Parser
 
 	def parsechar_command(vice, current_buffer, char)
 		buffer = vice.buffers[current_buffer]
-		raise "parsechar called from command mode" unless vice.mode == :command
+		raise 'parsechar called from command mode' unless vice.mode == :command
 		case char
 		# movement
 		when 'j'
@@ -50,15 +50,18 @@ class Vice::Parser
 		when 'h'
 			buffer.cursor_left
 		when 'w'
-			if @trail.length > 0
-				if @trail[0] == 'd' or @trail[0] == 'c'
+			if !@trail.length.empty?
+				if @trail[0] == 'd' || @trail[0] == 'c'
 					line_edited = buffer.currentline
-					line_edited.slice!(buffer.cursor.col,
-							   buffer.currentline.length - Vice::Movement.w(buffer.currentline, buffer.cursor.col) - 1)
+					right_limit = buffer.currentline.length
+					right_limit -= Vice::Movement.w(buffer.currentline, buffer.cursor.col) - 1
+
+					line_edited.slice! buffer.cursor.col, right_limit
+
 					buffer.setline buffer.cursor.line, line_edited
 				end
 				vice.mode = :insert if @trail[0] == 'c'
-				@trail = Array.new
+				@trail = []
 			else
 				buffer.cursor.col = Vice::Movement.w(buffer.currentline, buffer.cursor.col)
 			end
@@ -99,27 +102,27 @@ class Vice::Parser
 			buffer.rmchar
 			buffer.cursor.col -= 1 if buffer.cursor.col > 0
 		when 'c', 'd'
-			if @trail.length > 0 && @trail[0] == char
+			if !@trail.length.empty? && @trail[0] == char
 				if buffer.lines == 1
-					buffer.setline 0, ""
+					buffer.setline 0, ''
 				else
 					buffer.rmline
-					buffer.cursor.line -= 1 if buffer.lines <= buffer.cursor.line
 				end
+				buffer.cursor.line -= 1 if buffer.lines <= buffer.cursor.line
 				buffer.cursor.col = 0
 				vice.mode = :insert if char == 'c'
-				@trail = Array.new
+				@trail = []
 			else
 				@trail.push char
 			end
-		when ";", ":"
+		when ';', ':'
 			vice.mode = :prompt
 		end
 	end
 
 	def parsechar_insert(vice, current_buffer, char)
 		buffer = vice.buffers[current_buffer]
-		raise "insertchar called from insert mode" unless vice.mode == :insert
+		raise 'insertchar called from insert mode' unless vice.mode == :insert
 		case char
 		when 9
 			buffer.insert "\t"
@@ -136,7 +139,7 @@ class Vice::Parser
 				buffer.rmchar
 			end
 		when Integer
-			# not a character we can insert, do nothing
+			vice.prompt += char if char >= 0 && char <= 10
 		else
 			buffer.insert char
 			buffer.cursor.col += 1

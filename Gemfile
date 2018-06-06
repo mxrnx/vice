@@ -1,5 +1,6 @@
-source "https://rubygems.org"
+source 'https://rubygems.org'
 
-gem 'rake'
-gem 'minitest'
 gem 'curses'
+gem 'minitest'
+gem 'rake'
+gem 'rubocop'

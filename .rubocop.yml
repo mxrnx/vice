@@ -1,0 +1,37 @@
+# false positives on inline blocks
+Layout/ElseAlignment:
+        Enabled: false
+Layout/EndAlignment:
+        Enabled: false
+
+# tabs > spaces
+Layout/IndentationWidth:
+        Enabled: false
+Layout/Tab:
+        Enabled: false
+
+# false positives on clear function calls
+Lint/AmbiguousOperator:
+        Enabled: false
+
+# too tight margins
+Metrics/AbcSize:
+        Enabled: false
+Metrics/ClassLength:
+        Max: 180
+Metrics/CyclomaticComplexity:
+        Enabled: false
+Metrics/LineLength:
+        Max: 100
+Metrics/MethodLength:
+        Enabled: false
+Metrics/PerceivedComplexity:
+        Enabled: false
+
+# style disagreement
+Style/ClassAndModuleChildren:
+        Enabled: false
+
+# TODO
+Style/Documentation:
+        Enabled: false

@@ -14,9 +14,9 @@ module Vice
 
 		def initialize
 			@mode = :command
-			@buffers = Array.new
+			@buffers = []
 			@parser = Parser.new
-			@prompt = ""
+			@prompt = ''
 		end
 
 		def start
@@ -55,9 +55,9 @@ module Vice
 	end
 end
 
-require_relative "vice/buffer"
-require_relative "vice/cursor"
-require_relative "vice/parser"
-require_relative "vice/blitter"
-require_relative "vice/movement"
-require_relative "vice/prompt"
+require_relative 'vice/buffer'
+require_relative 'vice/cursor'
+require_relative 'vice/parser'
+require_relative 'vice/blitter'
+require_relative 'vice/movement'
+require_relative 'vice/prompt'
