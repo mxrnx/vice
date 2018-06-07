@@ -1,11 +1,8 @@
 language: ruby
 rvm: 2.3
-jobs:
-        include:
-                stage: test
-                script: bundle exec rake test
-                stage: style
-                script: bundle exec rake style
+script:
+        - bundle exec rake style
+        - bundle exec rake test
 os:
         - linux
         - osx
