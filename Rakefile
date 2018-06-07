@@ -9,6 +9,7 @@ task :test do
 		next if ['.', '..'].include? test
 		ruby 'test/vice/' + test
 	end
+	ruby 'test/vice.rb'
 end
 
 task :style do

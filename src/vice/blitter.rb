@@ -72,7 +72,7 @@ class Vice::Blitter
 	end
 
 	def drawbuffer(vice, window)
-		buffer = vice.buffers[vice.currentbuffer]
+		buffer = vice.buffers[vice.current_buffer]
 		visual_cursor = Vice::Cursor.new buffer.cursor.line, 0
 
 		(0..buffer.cursor.col - 1).each do |i|

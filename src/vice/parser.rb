@@ -122,6 +122,22 @@ class Vice::Parser
 			else
 				@trail.push 'd'
 			end
+		when 'g'
+			if !@trail.empty? && @trail[0] == 'g'
+				buffer.cursor.line = 0
+				buffer.cursor.col = 0
+			else
+				@trail.push 'g'
+			end
+		when 'G'
+			buffer.cursor.line = buffer.lines - 1
+			buffer.cursor.col = 0
+		when 't'
+			vice.next_buffer if !@trail.empty? && @trail[0] == 'g'
+			@trail = []
+		when 'T'
+			vice.prev_buffer if !@trail.empty? && @trail[0] == 'g'
+			@trail = []
 		when ';', ':'
 			vice.mode = :prompt
 		end
