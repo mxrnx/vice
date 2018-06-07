@@ -5,7 +5,7 @@ module Vice
 
 	class Vice
 		attr_accessor :buffers
-		attr_accessor :currentbuffer
+		attr_accessor :current_buffer
 		attr_accessor :cursor
 		attr_accessor :mode
 		attr_accessor :prompt
@@ -17,13 +17,13 @@ module Vice
 			@buffers = []
 			@parser = Parser.new
 			@prompt = ''
+
+			# for now: create a single buffer
+			@buffers.push Buffer.new nil
+			@current_buffer = 0
 		end
 
 		def start
-			# for now: create a single buffer
-			@buffers.push Buffer.new nil
-			@currentbuffer = 0
-
 			Curses.init_screen
 			Curses.noecho
 			Curses.start_color
@@ -35,7 +35,7 @@ module Vice
 			loop do
 				blitter.drawbuffer self, window
 				key = window.getch
-				@parser.parsekeypress self, @currentbuffer, key
+				@parser.parsekeypress self, @current_buffer, key
 			end
 
 			Curses.close_screen
@@ -51,6 +51,16 @@ module Vice
 
 		def reset_alert
 			@msg = nil
+		end
+
+		def next_buffer
+			@current_buffer += 1
+			@current_buffer = 0 if @current_buffer >= @buffers.length
+		end
+
+		def prev_buffer
+			@current_buffer -= 1
+			@current_buffer = @buffers.length - 1 if @current_buffer < 0
 		end
 	end
 end
