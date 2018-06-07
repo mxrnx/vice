@@ -41,7 +41,7 @@ class Vice::Blitter
 		modestring = if mode == :insert
 				     ' -- insert --'
 			     elsif mode == :prompt
-				     ':' + prompt
+				     ' :' + prompt
 			     end
 		window.addstr modestring
 
@@ -105,7 +105,7 @@ class Vice::Blitter
 		visual_cursor.col += @linenumwidth + 1	# leave space for line numbers
 
 		if vice.mode == :prompt
-			window.setpos Curses.lines - 2, vice.prompt.length + 1
+			window.setpos Curses.lines - 2, vice.prompt.length + 2
 		else
 			window.setpos visual_cursor.line, visual_cursor.col
 		end
