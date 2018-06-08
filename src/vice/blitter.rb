@@ -86,8 +86,25 @@ class Vice::Blitter
 		drawtabs vice, buffer, window
 
 		@linenumwidth = buffer.lines.to_s.length + 1
+
+		visual_cursor.line += 1 # space for tabs above buffer
+		visual_cursor.line -= buffer.v_scroll
+		visual_cursor.col += @linenumwidth + 1	# leave space for line numbers
+
+		while visual_cursor.line >= Curses.lines - 2
+			buffer.v_scroll += 1
+			visual_cursor.line -= 1
+		end
+
+		while visual_cursor.line < 1
+			buffer.v_scroll -= 1
+			visual_cursor.line += 1
+		end
+
 		(1..Curses.lines - 2).each do |r|
-			i = r - 1
+			# r: on-screen line
+			# i: in-buffer line
+			i = r - 1 + buffer.v_scroll
 			window.setpos r, 0
 			if i < buffer.lines
 				line = pad buffer.getline(i).gsub(/(\t)/, ' ' * Vice::TAB_WIDTH)
@@ -101,8 +118,6 @@ class Vice::Blitter
 
 		drawalert vice, window
 
-		visual_cursor.line += 1 # space for tabs above buffer
-		visual_cursor.col += @linenumwidth + 1	# leave space for line numbers
 
 		if vice.mode == :prompt
 			window.setpos Curses.lines - 2, vice.prompt.length + 2
