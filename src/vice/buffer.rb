@@ -3,26 +3,28 @@ class Vice::Buffer
 	attr_reader :filename
 	attr_reader :modified
 	attr_accessor :cursor
+	attr_accessor :v_scroll
 
 	def initialize(filename)
 		@buffer = []
 		if filename
 			@filename = filename
 			File.open(filename, 'r') do |f| # TODO: don't assume file exists
-				f.each_line { |line| @buffer.push line }
+				f.each_line { |line| @buffer.push line.chomp }
 			end
 		else
 			@buffer.push ''
 		end
 		@cursor = Vice::Cursor.new
 		@modified = false
+		@v_scroll = 0
 	end
 
 	def writef(filename)
 		@modified = false
 
 		File.open(filename, 'w') do |f|
-			f.write @buffer.join
+			f.write @buffer.join "\n"
 		end
 	end
 
