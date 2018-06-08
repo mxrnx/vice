@@ -118,7 +118,6 @@ class Vice::Blitter
 
 		drawalert vice, window
 
-
 		if vice.mode == :prompt
 			window.setpos Curses.lines - 2, vice.prompt.length + 2
 		else
