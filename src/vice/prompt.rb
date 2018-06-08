@@ -4,11 +4,11 @@ class Vice::Prompt
 		return if words.empty?
 
 		case words[0]
-		when 'e'
+		when 'e', 't'
 			if words.length > 1
 				files = words.dup
 				files.shift
-				vice.buffers.delete buffer unless buffer.modified
+				vice.buffers.delete buffer unless buffer.modified || words[0] == 't'
 				files.each do |f|
 					vice.buffers.push Vice::Buffer.new(f)
 				end
@@ -25,6 +25,7 @@ class Vice::Prompt
 			end
 		when 'q'
 			vice.buffers.delete buffer
+			vice.prev_buffer
 			exit if vice.buffers.empty?
 		end
 	end
