@@ -17,6 +17,8 @@ Lint/AmbiguousOperator:
 # too tight margins
 Metrics/AbcSize:
         Enabled: false
+Metrics/BlockNesting:
+        Max: 5
 Metrics/ClassLength:
         Max: 180
 Metrics/CyclomaticComplexity:
