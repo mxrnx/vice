@@ -50,12 +50,13 @@ class Vice::Parser
 			buffer.cursor_left
 		when 'w'
 			if !@trail.empty?
-				if @trail[0] == 'd' || @trail[0] == 'c'
+				if (@trail[0] == 'd' || @trail[0] == 'c') && buffer.currentline != ''
 					line_edited = buffer.currentline
-					right_limit = buffer.currentline.length
-					right_limit -= Vice::Movement.w(buffer.currentline, buffer.cursor.col) - 1
-
-					line_edited.slice! buffer.cursor.col, right_limit
+					slice_start = buffer.cursor.col
+					slice_end = Vice::Movement.w(buffer.currentline, buffer.cursor.col)
+					amount = slice_end - buffer.cursor.col
+					amount += 1 if slice_end == buffer.currentline.length - 1
+					line_edited.slice! slice_start, amount
 
 					buffer.setline buffer.cursor.line, line_edited
 				end
