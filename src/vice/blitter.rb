@@ -5,16 +5,21 @@ class Vice::Blitter
 	end
 
 	def drawtabs(vice, buffer, window)
+		window.attrset Curses.color_pair(1)
 		window.setpos 0, 0
 		window.addstr ' ' * Curses.cols
-		window.setpos 0, 3
+		window.setpos 0, 2
 		vice.buffers.each do |b|
+			window.attrset(Curses.color_pair(0) | Curses::A_BOLD) if b == buffer
+
 			name = b.filename || '[no name]'
-			name = b == buffer ? '>' + name + '<' : name
 			name = b.modified ? '+ ' + name : name
 
-			window.addstr name + ' | '
+			window.addstr ' ' + name + ' '
+
+			window.attrset Curses.color_pair(1) if b == buffer
 		end
+		window.attrset Curses.color_pair(0)
 	end
 
 	def drawalert(vice, window)
