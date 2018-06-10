@@ -32,6 +32,8 @@ module Vice
 
 			blitter = Blitter.new window
 
+			alert 'welcome to vice - https://github.com/knarka/vice'
+
 			loop do
 				blitter.drawbuffer self, window
 				key = window.getch

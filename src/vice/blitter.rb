@@ -29,7 +29,7 @@ class Vice::Blitter
 		return if vice.msg.nil?
 
 		window.setpos Curses.lines - 1, 0
-		window.addstr vice.msg
+		window.addstr '  ' + vice.msg
 
 		vice.reset_alert
 	end
