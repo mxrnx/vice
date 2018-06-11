@@ -7,6 +7,7 @@ class Vice::Buffer
 
 	def initialize(filename)
 		@buffer = []
+		@marks = {}
 		if filename
 			@filename = filename
 			File.open(filename, 'r') do |f| # TODO: don't assume file exists
@@ -137,5 +138,17 @@ class Vice::Buffer
 
 	def cols
 		@buffer[@cursor.line].length
+	end
+
+	def addmark(mark)
+		@marks[mark] = @cursor.clone
+	end
+
+	def gotomark(mark)
+		return false unless @marks[mark]
+		@cursor = @marks[mark].clone
+		@cursor.line = @buffer.length - 1 if @cursor.line >= @buffer.length
+		cursor_end_of_line
+		true
 	end
 end

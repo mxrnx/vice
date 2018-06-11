@@ -38,6 +38,18 @@ class Vice::Parser
 	def parsechar_command(vice, current_buffer, char)
 		buffer = vice.buffers[current_buffer]
 		raise 'parsechar called from command mode' unless vice.mode == :command
+
+		if @trail == ['m']
+			buffer.addmark char
+			vice.alert "added mark '" + char + "'"
+			@trail = []
+			return
+		elsif @trail == ["'"]
+			vice.alert 'mark not set' unless buffer.gotomark char
+			@trail = []
+			return
+		end
+
 		case char
 		# movement
 		when 'j'
@@ -133,6 +145,8 @@ class Vice::Parser
 		when 'G'
 			buffer.cursor.line = buffer.lines - 1
 			buffer.cursor.col = 0
+		when 'm'
+			@trail.push 'm' if @trail.empty?
 		when 't'
 			vice.next_buffer if !@trail.empty? && @trail[0] == 'g'
 			@trail = []
@@ -141,6 +155,8 @@ class Vice::Parser
 			@trail = []
 		when ';', ':'
 			vice.mode = :prompt
+		when "'"
+			@trail.push "'" if @trail.empty?
 		end
 	end
 
