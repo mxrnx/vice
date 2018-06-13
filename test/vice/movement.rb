@@ -1,6 +1,6 @@
 require 'minitest/autorun'
 
-require_relative '../../src/vice'
+require_relative '../../lib/vice'
 
 class TestMovement < MiniTest::Test
 	def test_w_end_of_string

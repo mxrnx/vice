@@ -1,6 +1,6 @@
 require 'minitest/autorun'
 
-require_relative '../../src/vice'
+require_relative '../../lib/vice'
 
 class TestBuffer < MiniTest::Test
 	def setup

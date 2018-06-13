@@ -1,6 +1,6 @@
 require 'minitest/autorun'
 
-require_relative '../../src/vice'
+require_relative '../../lib/vice'
 
 class TestParser < MiniTest::Test
 	def setup

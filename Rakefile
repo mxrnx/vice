@@ -1,7 +1,7 @@
 task default: %w[run]
 
 task :run do
-	ruby 'src/main.rb'
+	ruby 'lib/main.rb'
 end
 
 task :test do
@@ -13,5 +13,5 @@ task :test do
 end
 
 task :style do
-	sh 'rubocop -c .rubocop.yml src/ test/ Gemfile Rakefile'
+	sh 'rubocop -c .rubocop.yml lib/ test/ Gemfile Rakefile'
 end
