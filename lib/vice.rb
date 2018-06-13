@@ -32,7 +32,7 @@ module Vice
 
 			blitter = Blitter.new window
 
-			alert 'welcome to vice - https://github.com/knarka/vice'
+			alert "welcome to vice #{VERSION} - https://github.com/knarka/vice"
 
 			loop do
 				blitter.drawbuffer self, window
@@ -67,6 +67,7 @@ module Vice
 	end
 end
 
+require_relative 'vice/version'
 require_relative 'vice/buffer'
 require_relative 'vice/cursor'
 require_relative 'vice/parser'
