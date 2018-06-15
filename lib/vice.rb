@@ -12,15 +12,21 @@ module Vice
 
 		attr_reader :msg
 
-		def initialize
+		def initialize(filenames)
 			@mode = :command
 			@buffers = []
 			@parser = Parser.new
 			@prompt = ''
 
-			# for now: create a single buffer
-			@buffers.push Buffer.new nil
 			@current_buffer = 0
+			if filenames.nil? || filenames.empty?
+				@buffers.push Buffer.new nil
+			else
+				filenames.each do |f|
+					@buffers.push Buffer.new(f)
+					next_buffer
+				end
+			end
 		end
 
 		def start

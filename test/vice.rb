@@ -4,7 +4,7 @@ require_relative '../lib/vice'
 
 class TestVice < MiniTest::Test
 	def setup
-		@vice = Vice::Vice.new
+		@vice = Vice::Vice.new nil
 		@vice.buffers.push Vice::Buffer.new nil
 		@vice.buffers.push Vice::Buffer.new nil
 	end
