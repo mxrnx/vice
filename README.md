@@ -3,8 +3,10 @@
 
 vice (**vi**sual **c**ode **e**ditor) is a small vi-like editor. It is currently still a work in progress.
 
-## Running
-Execute `rake`.
+## Installation
+Simply running `gem install vice-editor` should be sufficient to install vice. You can then execute `vice` to start the editor.
 
-## Running the tests
-Execute `rake test`.
+## Development
+Running: `rake`.
+Tests: `rake test`.
+Style: `rake style`.
