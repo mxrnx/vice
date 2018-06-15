@@ -1,8 +1,7 @@
 require 'curses'
+require 'yaml'
 
 module Vice
-	TAB_WIDTH = 4
-
 	class Vice
 		attr_accessor :buffers
 		attr_accessor :current_buffer
@@ -11,8 +10,11 @@ module Vice
 		attr_accessor :prompt
 
 		attr_reader :msg
+		attr_reader :config
 
 		def initialize(filenames)
+			init_config
+
 			@mode = :command
 			@buffers = []
 			@parser = Parser.new
@@ -27,6 +29,15 @@ module Vice
 					next_buffer
 				end
 			end
+		end
+
+		def init_config
+			defaults = { 'tab_width' => 4 } # defaults
+
+			configfile = "#{Dir.home}/.vicerc"
+			user_defined = File.open(configfile) { |f| YAML.safe_load(f.read) } if File.file? configfile
+
+			@config = user_defined.nil? ? defaults : defaults.merge(user_defined)
 		end
 
 		def start
