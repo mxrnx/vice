@@ -1,0 +1,6 @@
+# editor files
+*.tmp
+*~
+
+# compiled gems
+*.gem
