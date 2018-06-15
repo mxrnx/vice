@@ -1,7 +1,8 @@
 task default: %w[run]
 
 task :run do
-	ruby 'lib/main.rb'
+	require_relative 'lib/vice'
+	Vice::Vice.new(nil).start
 end
 
 task :test do
