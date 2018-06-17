@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 	s.has_rdoc = false
 	s.summary = 'vi-like text editor'
 	s.author = 'knarka'
-	s.email = 'knarka@users.noreply.github.com'
+	s.email = 'knarka@airmail.cc'
 	s.homepage = 'https://github.com/knarka/vice'
 	s.executables = ['vice']
 
