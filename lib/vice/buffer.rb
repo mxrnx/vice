@@ -27,6 +27,8 @@ class Vice::Buffer
 		File.open(filename, 'w') do |f|
 			f.write @buffer.join "\n"
 		end
+
+		@filename = filename
 	end
 
 	def write
