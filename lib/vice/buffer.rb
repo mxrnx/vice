@@ -38,11 +38,11 @@ class Vice::Buffer
 	def cursor_end_of_line
 		# if we're out of bounds, move the cursor to the end of the line
 		@cursor.col = @buffer[@cursor.line].length - 1 if @cursor.col >= @buffer[@cursor.line].length
-		@cursor.col = 0 if @cursor.col < 0
+		@cursor.col = 0 if @cursor.col.negative?
 	end
 
 	def cursor_up
-		@cursor.line -= 1 if @cursor.line > 0
+		@cursor.line -= 1 if @cursor.line.positive?
 		cursor_end_of_line
 	end
 
@@ -52,7 +52,7 @@ class Vice::Buffer
 	end
 
 	def cursor_left
-		@cursor.col -= 1 if @cursor.col > 0
+		@cursor.col -= 1 if @cursor.col.positive?
 	end
 
 	def cursor_right

@@ -72,7 +72,7 @@ class Vice::Blitter
 
 	def pad(string)
 		delta = Curses.cols - string.length
-		delta.times { string += ' ' } if delta > 0
+		delta.times { string += ' ' } if delta.positive?
 		string
 	end
 

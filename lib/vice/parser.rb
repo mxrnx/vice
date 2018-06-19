@@ -114,7 +114,7 @@ class Vice::Parser
 		# etc.
 		when 'x'
 			buffer.rmchar
-			buffer.cursor.col -= 1 if buffer.cursor.col > 0
+			buffer.cursor.col -= 1 if buffer.cursor.col.positive?
 		when 'c'
 			if !@trail.empty? && @trail[0] == 'c'
 				buffer.setline buffer.cursor.line, ''
@@ -176,7 +176,7 @@ class Vice::Parser
 			vice.mode = :command
 			buffer.cursor_end_of_line
 		when 127 # backspace
-			if buffer.cursor.col > 0
+			if buffer.cursor.col.positive?
 				buffer.cursor.col -= 1
 				buffer.rmchar
 			end

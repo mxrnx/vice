@@ -31,7 +31,9 @@ class Vice::Movement
 
 	def self.b_real(line, start, harsh)
 		# if we're already on the beginning of a word, we jump to the previous one
-		start -= 1 if start > 0 && !whitespace(line[start], harsh) && whitespace(line[start - 1], harsh)
+		if start.positive? && !whitespace(line[start], harsh) && whitespace(line[start - 1], harsh)
+			start -= 1
+		end
 
 		b_internal(line, start, harsh)
 	end

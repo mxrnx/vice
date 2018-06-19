@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rake'
 require_relative 'lib/vice/version'
 
@@ -16,8 +18,7 @@ Gem::Specification.new do |s|
 	s.add_dependency 'curses', '= 1.2.4'
 	s.required_ruby_version = '>= 2.3.3'
 
-	s.files = %w(LICENSE README.md) +
-		Dir.glob('{bin,lib}/**/*')
+	s.files = %w[LICENSE README.md] + Dir.glob('{bin,lib}/**/*')
 
 	s.require_path = 'lib'
 	s.bindir = 'bin'

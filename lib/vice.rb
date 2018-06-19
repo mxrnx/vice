@@ -79,7 +79,7 @@ module Vice
 
 		def prev_buffer
 			@current_buffer -= 1
-			@current_buffer = @buffers.length - 1 if @current_buffer < 0
+			@current_buffer = @buffers.length - 1 if @current_buffer.negative?
 		end
 	end
 end
