@@ -16,8 +16,8 @@ Gem::Specification.new do |s|
 	s.add_dependency 'curses', '= 1.2.4'
 	s.required_ruby_version = '>= 2.3.3'
 
-	s.files = %w(LICENSE README.md Rakefile) +
-		Dir.glob('{bin,test,lib}/**/*')
+	s.files = %w(LICENSE README.md) +
+		Dir.glob('{bin,lib}/**/*')
 
 	s.require_path = 'lib'
 	s.bindir = 'bin'
