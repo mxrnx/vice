@@ -1,3 +1,6 @@
+AllCops:
+        TargetRubyVersion: 2.3
+
 # false positives on inline blocks
 Layout/ElseAlignment:
         Enabled: false
@@ -36,4 +39,6 @@ Style/ClassAndModuleChildren:
 
 # TODO
 Style/Documentation:
+        Enabled: false
+Style/FrozenStringLiteralComment:
         Enabled: false

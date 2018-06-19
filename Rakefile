@@ -14,5 +14,5 @@ task :test do
 end
 
 task :style do
-	sh 'rubocop -c .rubocop.yml lib/ test/ Gemfile Rakefile'
+	sh 'rubocop -c .rubocop.yml lib/ test/ Gemfile Rakefile vice-editor.gemspec'
 end
