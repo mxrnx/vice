@@ -21,13 +21,15 @@ class Vice::Parser
 
 	def parsechar_prompt(vice, current_buffer, char)
 		case char
-		when 10
+		when 10 # enter
 			Vice::Prompt.parse vice, vice.prompt, vice.buffers[current_buffer]
 			vice.prompt = ''
 			vice.mode = :command
-		when 27
+		when 27 # escape
 			vice.prompt = ''
 			vice.mode = :command
+		when 127 # backspace
+			vice.prompt = vice.prompt[0..-2]
 		when Integer
 			vice.prompt += char if char >= 0 && char <= 10
 		else
