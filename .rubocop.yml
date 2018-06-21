@@ -12,6 +12,8 @@ Layout/IndentationWidth:
         Enabled: false
 Layout/Tab:
         Enabled: false
+Layout/IndentHash:
+        Enabled: false
 
 # false positives on clear function calls
 Lint/AmbiguousOperator:

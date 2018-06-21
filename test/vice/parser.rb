@@ -72,10 +72,19 @@ class TestParser < MiniTest::Test
 		assert_equal @vice.buffers[@buffer].getline(1), 'é melhor ser alegre'
 	end
 
+	# test if pressing escape exits insert mode
 	def test_parsechar_insert_escape
 		@vice.mode = :insert
 
 		@parser.parsechar_insert @vice, @buffer, 27
 		assert_equal @vice.mode, :command
+	end
+
+	# marks are a special case, so make sure there's no crashes here
+	def test_setting_mark
+		@parser.parsechar_command @vice, @buffer, 'm'
+		@parser.parsechar_command @vice, @buffer, 'a'
+		@parser.parsechar_command @vice, @buffer, "'"
+		@parser.parsechar_command @vice, @buffer, 'a'
 	end
 end

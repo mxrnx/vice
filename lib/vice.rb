@@ -32,7 +32,7 @@ module Vice
 		end
 
 		def init_config
-			defaults = { 'tab_width' => 4 } # defaults
+			defaults = DEFAULTS.clone
 
 			configfile = "#{Dir.home}/.vicerc"
 			user_defined = File.open(configfile) { |f| YAML.safe_load(f.read) } if File.file? configfile
@@ -84,8 +84,10 @@ module Vice
 	end
 end
 
+require_relative 'vice/constants.rb'
 require_relative 'vice/version'
 require_relative 'vice/buffer'
+require_relative 'vice/keypress.rb'
 require_relative 'vice/cursor'
 require_relative 'vice/parser'
 require_relative 'vice/blitter'
