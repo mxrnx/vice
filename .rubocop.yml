@@ -1,7 +1,7 @@
 AllCops:
         TargetRubyVersion: 2.3
 
-# false positives on inline blocks
+# false positives on inline if-blocks
 Layout/ElseAlignment:
         Enabled: false
 Layout/EndAlignment:
@@ -22,8 +22,6 @@ Lint/AmbiguousOperator:
 # too tight margins
 Metrics/AbcSize:
         Enabled: false
-Metrics/BlockNesting:
-        Max: 5
 Metrics/ClassLength:
         Max: 180
 Metrics/CyclomaticComplexity:
@@ -31,7 +29,7 @@ Metrics/CyclomaticComplexity:
 Metrics/LineLength:
         Max: 100
 Metrics/MethodLength:
-        Enabled: false
+        Max: 40
 Metrics/PerceivedComplexity:
         Enabled: false
 
