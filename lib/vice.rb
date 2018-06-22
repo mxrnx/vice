@@ -35,6 +35,12 @@ module Vice
 			defaults = DEFAULTS.clone
 
 			configfile = "#{Dir.home}/.vicerc"
+
+			unless File.file? configfile
+				@config = defaults
+				return
+			end
+
 			user_defined = File.open(configfile) { |f| YAML.safe_load(f.read) } if File.file? configfile
 
 			# merge the hashes, to up to two levels of depth.
