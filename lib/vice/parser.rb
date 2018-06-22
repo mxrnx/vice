@@ -36,9 +36,10 @@ class Vice::Parser
 	end
 
 	def parsechar_command(vice, current_buffer, char)
-		buffer = vice.buffers[current_buffer]
 		raise 'command parser called from wrong mode' unless vice.mode == :command
 		return if char.is_a? Integer
+
+		buffer = vice.buffers[current_buffer]
 
 		if %i[mark_set mark_jump].include? @current_command
 			Vice::KeyPress.public_send(@current_command, vice, buffer, char)
@@ -65,8 +66,10 @@ class Vice::Parser
 	end
 
 	def parsechar_insert(vice, current_buffer, char)
-		buffer = vice.buffers[current_buffer]
 		raise 'insert parser called from wrong mode' unless vice.mode == :insert
+
+		buffer = vice.buffers[current_buffer]
+
 		case char
 		when 9
 			buffer.insert "\t"
