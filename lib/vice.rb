@@ -37,7 +37,19 @@ module Vice
 			configfile = "#{Dir.home}/.vicerc"
 			user_defined = File.open(configfile) { |f| YAML.safe_load(f.read) } if File.file? configfile
 
-			@config = user_defined.nil? ? defaults : defaults.merge(user_defined)
+			# merge the hashes, to up to two levels of depth.
+			# positive side-effect: our keys are symbols now
+			@config = {}
+			defaults.each do |dk, dv|
+				uv = user_defined[dk.to_s]
+				@config[dk] = if uv.nil?
+						      dv
+					      elsif uv.is_a? Hash
+						      dv.merge(uv)
+					      else
+						      uv
+					      end
+			end
 		end
 
 		def start

@@ -57,7 +57,7 @@ class Vice::Parser
 		else
 			keep_current = false
 			vice.config[:keys].each do |k|
-				keep_current = true if k[0].start_with? @current_command
+				keep_current = true if k[0].to_s.start_with? @current_command
 			end
 			@current_command = '' unless keep_current
 		end
