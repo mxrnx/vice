@@ -38,6 +38,7 @@ class Vice::Parser
 	def parsechar_command(vice, current_buffer, char)
 		buffer = vice.buffers[current_buffer]
 		raise 'command parser called from wrong mode' unless vice.mode == :command
+		return if char.is_a? Integer
 
 		if %i[mark_set mark_jump].include? @current_command
 			Vice::KeyPress.public_send(@current_command, vice, buffer, char)
@@ -51,7 +52,7 @@ class Vice::Parser
 			if %i[mark_set mark_jump].include? command
 				@current_command = command
 			else
-				Vice::KeyPress.public_send(command, vice, buffer)
+				Vice::KeyPress.public_send(command, vice, buffer) if Vice::KeyPress.respond_to? command.to_sym
 				@current_command = ''
 			end
 		else
