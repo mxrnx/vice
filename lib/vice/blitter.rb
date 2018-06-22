@@ -82,7 +82,7 @@ class Vice::Blitter
 
 		(0..buffer.cursor.col - 1).each do |i|
 			visual_cursor.col += if buffer.currentline[i] == "\t"
-						     vice.config['tab_width']
+						     vice.config[:tab_width]
 					     else
 						     1
 					     end
@@ -112,7 +112,7 @@ class Vice::Blitter
 			i = r - 1 + buffer.v_scroll
 			window.setpos r, 0
 			if i < buffer.lines
-				line = pad buffer.getline(i).gsub(/(\t)/, ' ' * vice.config['tab_width'])
+				line = pad buffer.getline(i).gsub(/(\t)/, ' ' * vice.config[:tab_width])
 				window.addstr formatnumber(i + 1) + line
 			else
 				window.addstr pad(formatnumber('~'))
