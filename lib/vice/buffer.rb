@@ -5,20 +5,28 @@ class Vice::Buffer
 	attr_accessor :cursor
 	attr_accessor :v_scroll
 
-	def initialize(filename)
+	def initialize(vice, filename)
 		@buffer = []
 		@marks = {}
+
+		@cursor = Vice::Cursor.new
+		@modified = false
+		@v_scroll = 0
+
 		if filename
 			@filename = filename
-			File.open(filename, 'r') do |f| # TODO: don't assume file exists
-				f.each_line { |line| @buffer.push line.chomp }
+
+			if File.file? filename
+				File.open(filename, 'r') do |f| # TODO: don't assume file exists
+					f.each_line { |line| @buffer.push line.chomp }
+				end
+			else
+				vice.alert 'new file'
+				@buffer.push ''
 			end
 		else
 			@buffer.push ''
 		end
-		@cursor = Vice::Cursor.new
-		@modified = false
-		@v_scroll = 0
 	end
 
 	def writef(filename)

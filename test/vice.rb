@@ -5,8 +5,8 @@ require_relative '../lib/vice'
 class TestVice < MiniTest::Test
 	def setup
 		@vice = Vice::Vice.new nil
-		@vice.buffers.push Vice::Buffer.new nil
-		@vice.buffers.push Vice::Buffer.new nil
+		@vice.buffers.push Vice::Buffer.new(@vice, nil)
+		@vice.buffers.push Vice::Buffer.new(@vice, nil)
 	end
 
 	def test_switch_tab_forward
