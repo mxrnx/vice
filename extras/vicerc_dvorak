@@ -1,0 +1,32 @@
+---
+tab_width: 4
+keys:
+  h: down
+  t: up
+  n: right
+  d: left
+  ",": word
+  "<": word_large
+  x: backword
+  X: backword_large
+  $: endline
+  "0": beginline
+  c: insert_before
+  a: insert_after
+  C: insert_begin
+  A: insert_end
+  R: insert_before_line
+  r: insert_after_line
+  Q: remove_before
+  q: remove_after
+  "j,": change_word
+  jj: change_line
+  "e,": delete_word
+  ee: delete_line
+  i: jump_start
+  I: jump_end
+  m: mark_set
+  "-": mark_jump
+  y: buffer_next
+  Y: buffer_prev
+  s: mode_prompt
