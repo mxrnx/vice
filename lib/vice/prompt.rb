@@ -10,7 +10,7 @@ class Vice::Prompt
 				files.shift
 				vice.buffers.delete buffer unless buffer.modified || words[0] == 't'
 				files.each do |f|
-					vice.buffers.push Vice::Buffer.new(f)
+					vice.buffers.push Vice::Buffer.new(vice, f)
 				end
 			else
 				vice.error 'no such file'

@@ -5,7 +5,6 @@ require_relative '../../lib/vice'
 class TestParser < MiniTest::Test
 	def setup
 		@vice = Vice::Vice.new nil
-		@vice.buffers.push Vice::Buffer.new nil
 		@parser = Vice::Parser.new
 		@buffer = 0
 	end

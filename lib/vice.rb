@@ -22,10 +22,10 @@ module Vice
 
 			@current_buffer = 0
 			if filenames.nil? || filenames.empty?
-				@buffers.push Buffer.new nil
+				@buffers.push Buffer.new(self, nil)
 			else
 				filenames.each do |f|
-					@buffers.push Buffer.new(f)
+					@buffers.push Buffer.new(self, f)
 					next_buffer
 				end
 			end
