@@ -51,16 +51,12 @@ module Vice
 				@config[dk] = if uv.nil?
 						      dv
 					      elsif uv.is_a? Hash
-						      uv = Hash[uv.map{ |k, v| [k, v.to_sym] }]
+						      uv = Hash[uv.map { |k, v| [k, v.to_sym] }]
 						      dv.merge(uv)
 					      else
 						      uv
 					      end
 			end
-
-			puts defaults
-			puts user_defined
-			puts @config
 		end
 
 		def start
