@@ -6,11 +6,7 @@ task :run do
 end
 
 task :test do
-	Dir.foreach('test/vice') do |test|
-		next if ['.', '..'].include? test
-		ruby 'test/vice/' + test
-	end
-	ruby 'test/vice.rb'
+	ruby 'test/test_helper.rb'
 end
 
 task :style do

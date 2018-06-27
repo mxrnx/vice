@@ -4,3 +4,6 @@
 
 # compiled gems
 *.gem
+
+# etc.
+coverage/
