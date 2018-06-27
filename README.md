@@ -1,5 +1,6 @@
 # vice
 [![Build Status](https://travis-ci.org/knarka/vice.svg?branch=master)](https://travis-ci.org/knarka/vice)
+[![Coverage Status](https://coveralls.io/repos/github/knarka/vice/badge.svg?branch=master)](https://coveralls.io/github/knarka/vice?branch=master)
 [![Gem Version](https://badge.fury.io/rb/vice-editor.svg)](https://badge.fury.io/rb/vice-editor)
 
 vice (**vi**sual **c**ode **e**ditor) is a small vi-like editor. It is currently still a work in progress.
