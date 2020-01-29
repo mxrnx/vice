@@ -14,10 +14,12 @@ require 'minitest/autorun'
 
 Dir.foreach('test/') do |test|
 	next if ['.', '..'].include? test
+
 	require_relative test
 end
 
 Dir.foreach('test/vice') do |test|
 	next if ['.', '..'].include? test
+
 	require_relative 'vice/' + test
 end

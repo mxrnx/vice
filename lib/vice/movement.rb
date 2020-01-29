@@ -1,7 +1,7 @@
 class Vice::Movement
 	def self.whitespace(char, harsh)
 		if harsh # only real whitespace
-			(char == ' ' || char == "\t" || char == "\n")
+			[' ', "\t", "\n"].include? char
 		else # anything that's not alphanumeric
 			char !~ /\A\p{Alnum}+\z/
 		end
@@ -10,6 +10,7 @@ class Vice::Movement
 	def self.w_real(line, start, harsh)
 		return start if start == line.length - 1
 		return start + 1 if whitespace(line[start], harsh) && !whitespace(line[start + 1], harsh)
+
 		w_real(line, start + 1, harsh)
 	end
 
