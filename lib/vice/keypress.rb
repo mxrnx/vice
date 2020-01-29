@@ -122,8 +122,12 @@ class Vice::KeyPress
 	end
 
 	def self.mark_set(vice, buffer, char)
+    if buffer.hasmark char
+		  vice.alert "replaced mark '" + char + "'"
+    else
+		  vice.alert "added mark '" + char + "'"
+    end
 		buffer.addmark char
-		vice.alert "added mark '" + char + "'"
 	end
 
 	def self.mark_jump(vice, buffer, char)

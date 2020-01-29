@@ -154,8 +154,12 @@ class Vice::Buffer
 		@marks[mark] = @cursor.clone
 	end
 
+  def hasmark(mark)
+		!!@marks[mark]
+  end
+
 	def gotomark(mark)
-		return false unless @marks[mark]
+    return false unless hasmark(mark)
 		@cursor = @marks[mark].clone
 		@cursor.line = @buffer.length - 1 if @cursor.line >= @buffer.length
 		cursor_end_of_line
