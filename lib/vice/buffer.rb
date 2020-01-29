@@ -32,6 +32,8 @@ class Vice::Buffer
 	def writef(filename)
 		@modified = false
 
+		@buffer[-1] += "\n" unless @buffer[-1][-1] == "\n"
+
 		File.open(filename, 'w') do |f|
 			f.write @buffer.join "\n"
 		end
@@ -154,12 +156,13 @@ class Vice::Buffer
 		@marks[mark] = @cursor.clone
 	end
 
-  def hasmark(mark)
-		!!@marks[mark]
-  end
+	def hasmark(mark)
+		!@marks[mark].nil?
+	end
 
 	def gotomark(mark)
-    return false unless hasmark(mark)
+		return false unless hasmark(mark)
+
 		@cursor = @marks[mark].clone
 		@cursor.line = @buffer.length - 1 if @cursor.line >= @buffer.length
 		cursor_end_of_line

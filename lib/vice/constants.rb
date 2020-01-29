@@ -1,7 +1,7 @@
 module Vice
 	DEFAULTS = {
-		tab_width:	4,
-		keys:		{
+		tab_width: 4,
+		keys: {
 			'j' => :down,
 			'k' => :up,
 			'l' => :right,
